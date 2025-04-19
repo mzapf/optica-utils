@@ -152,7 +152,7 @@ export default function Home() {
                         <div className="text-center sm:text-left pt-2">
                             <p className="text-xs text-muted-foreground flex items-center justify-center sm:justify-start gap-1.5">
                                 <Info size={14} />
-                                Ingrese VL y ADD, <span className='font-medium'>o</span> ingrese VC directamente para calcular RPI.
+                                Ingrese LEJOS y ADD, <span className='font-medium'>o</span> ingrese CERCA directamente para calcular RPI.
                             </p>
                         </div>
                     </section>
@@ -161,7 +161,7 @@ export default function Home() {
                     {(resultOD_PI_075 !== null || resultOI_PI_075 !== null || resultOD_PI_125 !== null || resultOI_PI_125 !== null) && errorMessages.length === 0 ? (
                         <section className="space-y-4 p-4 mt-5 border-2 rounded-lg bg-green-100 dark:bg-green-900/30 border-green-500 dark:border-green-600 shadow-md animate-fade-in">
                             <h3 className="text-base sm:text-lg font-semibold border-b border-green-400 dark:border-green-600 pb-2 mb-4 text-green-800 dark:text-green-300 flex items-center gap-2">
-                                <CheckCircle className="h-5 w-5" /> Resultados: Distancia Intermedia
+                                <CheckCircle className="h-5 w-5" /> Posibles Distancias Intermedias
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-3 p-4 border border-green-300 dark:border-green-700 rounded bg-white dark:bg-gray-800/40 shadow-sm">
