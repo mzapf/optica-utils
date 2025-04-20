@@ -91,30 +91,49 @@ export default function Home() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 items-start">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="odAdd" className="text-sm font-medium">OD ADD</Label>
-                                    <Input id="odAdd" type="text" inputMode="decimal" placeholder="" value={odAdd}
-                                           onChange={handleInputChange(setOdAdd, "odAdd")}
-                                        className={cn(
-                                            'transition-colors placeholder:text-muted-foreground/60 h-9',
-                                            highlightOdAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
-                                            getErrorClass("odAdd", fieldErrors)
-                                        )}
-                                        aria-invalid={!!fieldErrors["odAdd"]}
-                                    />
+                                    <div className="flex items-center gap-2">
+                                        <Button type="button" variant="outline" size="icon"
+                                            aria-label="Restar 0.25"
+                                            onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", -0.25)}
+                                            disabled={parseFloat(odAdd || '0') <= 0}
+                                        >-</Button>
+                                        <Input id="odAdd" type="text" inputMode="decimal" placeholder="" value={odAdd}
+                                            onChange={handleInputChange(setOdAdd, "odAdd")}
+                                            className={cn(
+                                                'transition-colors placeholder:text-muted-foreground/60 h-9',
+                                                highlightOdAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
+                                                getErrorClass("odAdd", fieldErrors)
+                                            )}
+                                            aria-invalid={!!fieldErrors["odAdd"]}
+                                        />
+                                        <Button type="button" variant="outline" size="icon" aria-label="Sumar 0.25"
+                                            onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", 0.25)}
+                                        >+</Button>
+                                    </div>
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="oiAdd" className="text-sm font-medium">OI ADD</Label>
-                                    <Input id="oiAdd" type="text" inputMode="decimal" placeholder="" value={oiAdd}
-                                           onChange={handleInputChange(setOiAdd, "oiAdd")}
-                                           className={cn(
-                                            'transition-colors placeholder:text-muted-foreground/60 h-9',
-                                            highlightOiAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
-                                            getErrorClass("oiAdd", fieldErrors)
-                                        )}
-                                        aria-invalid={!!fieldErrors["oiAdd"]}
-                                   />
+                                    <div className="flex items-center gap-2">
+                                        <Button type="button" variant="outline" size="icon" aria-label="Restar 0.25"
+                                            onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", -0.25)}
+                                            disabled={parseFloat(oiAdd || '0') <= 0}
+                                        >-</Button>
+                                        <Input id="oiAdd" type="text" inputMode="decimal" placeholder="" value={oiAdd}
+                                            onChange={handleInputChange(setOiAdd, "oiAdd")}
+                                            className={cn(
+                                                'transition-colors placeholder:text-muted-foreground/60 h-9',
+                                                highlightOiAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
+                                                getErrorClass("oiAdd", fieldErrors)
+                                            )}
+                                            aria-invalid={!!fieldErrors["oiAdd"]}
+                                        />
+                                        <Button type="button" variant="outline" size="icon" aria-label="Sumar 0.25"
+                                            onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", 0.25)}
+                                        >+</Button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="pt-1 text-center sm:text-right">
+                            <div className="pt-1 text-center">
                                 <Button
                                     type="button"
                                     variant="outline"
@@ -167,7 +186,7 @@ export default function Home() {
                     {(resultOD_PI_075 !== null || resultOI_PI_075 !== null || resultOD_PI_125 !== null || resultOI_PI_125 !== null) && errorMessages.length === 0 ? (
                         <section className="space-y-4 p-4 mt-5 border-2 rounded-lg bg-green-100 dark:bg-green-900/30 border-green-500 dark:border-green-600 shadow-md animate-fade-in">
                             <h3 className="text-base sm:text-lg font-semibold border-b border-green-400 dark:border-green-600 pb-2 mb-4 text-green-800 dark:text-green-300 flex items-center gap-2">
-                                <CheckCircle className="h-5 w-5" /> Posibles Distancias Intermedias
+                                <CheckCircle className="h-5 w-5" /> Distancias Intermedias
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-3 p-4 border border-green-300 dark:border-green-700 rounded bg-white dark:bg-gray-800/40 shadow-sm">
