@@ -101,53 +101,57 @@ export default function Home() {
                     {/* --- Sección ADD --- */}
                     <section className="space-y-4 p-4 border dark:border-gray-700/50 rounded-lg bg-white dark:bg-gray-800/20 shadow-sm">
                         <h3 className="text-base sm:text-lg font-semibold border-b dark:border-gray-600 pb-2 mb-4 text-gray-700 dark:text-gray-300">Adición (ADD)</h3>
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 items-start">
+                        <div className="flex flex-col items-center w-full">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 items-center w-full max-w-xs sm:max-w-none">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="odAdd" className="text-sm font-medium">OD ADD</Label>
-                                    <div className="flex items-center gap-2">
-                                        <Button type="button" variant="outline" size="icon"
+                                    <div className="flex items-center gap-0 rounded-md border border-input dark:border-gray-700/50 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-colors">
+                                        <Button type="button" variant="ghost" size="icon"
                                             aria-label="Restar 0.25"
                                             onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", -0.25)}
                                             disabled={parseFloat(odAdd || '0') <= 0}
+                                            className="h-9 w-9 flex-shrink-0 rounded-r-none border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                                         >-</Button>
                                         <Input id="odAdd" type="text" inputMode="decimal" placeholder="" value={odAdd}
                                             onChange={handleInputChange(setOdAdd, "odAdd")}
                                             className={cn(
-                                                'transition-colors placeholder:text-muted-foreground/60 h-9',
+                                                'text-center flex-grow min-w-0 h-9 placeholder:text-muted-foreground/60 rounded-none z-10 relative focus:z-20 focus:ring-0 focus:outline-none border-none shadow-none bg-transparent',
                                                 highlightOdAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
                                                 getErrorClass("odAdd", fieldErrors)
                                             )}
                                             aria-invalid={!!fieldErrors["odAdd"]}
                                         />
-                                        <Button type="button" variant="outline" size="icon" aria-label="Sumar 0.25"
+                                        <Button type="button" variant="ghost" size="icon" aria-label="Sumar 0.25"
                                             onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", 0.25)}
+                                            className="h-9 w-9 flex-shrink-0 rounded-l-none border-l dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                                         >+</Button>
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="oiAdd" className="text-sm font-medium">OI ADD</Label>
-                                    <div className="flex items-center gap-2">
-                                        <Button type="button" variant="outline" size="icon" aria-label="Restar 0.25"
+                                    <div className="flex items-center gap-0 rounded-md border border-input dark:border-gray-700/50 focus-within:ring-1 focus-within:ring-ring focus-within:border-ring transition-colors">
+                                        <Button type="button" variant="ghost" size="icon" aria-label="Restar 0.25"
                                             onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", -0.25)}
                                             disabled={parseFloat(oiAdd || '0') <= 0}
+                                            className="h-9 w-9 flex-shrink-0 rounded-r-none border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                                         >-</Button>
                                         <Input id="oiAdd" type="text" inputMode="decimal" placeholder="" value={oiAdd}
                                             onChange={handleInputChange(setOiAdd, "oiAdd")}
                                             className={cn(
-                                                'transition-colors placeholder:text-muted-foreground/60 h-9',
+                                                'text-center flex-grow min-w-0 h-9 placeholder:text-muted-foreground/60 rounded-none z-10 relative focus:z-20 focus:ring-0 focus:outline-none border-none shadow-none bg-transparent',
                                                 highlightOiAdd ? C.INPUT_HIGHLIGHT_CLASS : '',
                                                 getErrorClass("oiAdd", fieldErrors)
                                             )}
                                             aria-invalid={!!fieldErrors["oiAdd"]}
                                         />
-                                        <Button type="button" variant="outline" size="icon" aria-label="Sumar 0.25"
+                                        <Button type="button" variant="ghost" size="icon" aria-label="Sumar 0.25"
                                             onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", 0.25)}
+                                            className="h-9 w-9 flex-shrink-0 rounded-l-none border-l dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                                         >+</Button>
                                     </div>
                                 </div>
                             </div>
-                            <div className="pt-1 text-center">
+                            <div className="pt-4 text-center w-full">
                                 <Button
                                     type="button"
                                     variant="outline"
@@ -254,15 +258,14 @@ export default function Home() {
             </Card>
 
             {/* --- Footer --- */}
-            <footer className="mt-8 text-center text-xs text-gray-500 dark:text-gray-400 w-full max-w-xl">
-                Desarrollado por Matias Zapf |{' '}
+            <footer className="mt-8 text-center text-xs text-gray-500 dark:text-gray-400 w-full max-w-xl flex justify-center">
                 <Link
                     href="https://github.com/mzapf/optica-utils/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 hover:text-primary dark:hover:text-primary-foreground transition-colors underline underline-offset-2"
+                    className="inline-flex items-center gap-2 hover:text-primary dark:hover:text-primary-foreground transition-colors underline underline-offset-2"
                 >
-                    <Github size={14} /> Ver en GitHub
+                    <Github size={16} /> Desarrollado por Matias Zapf
                 </Link>
             </footer>
 
