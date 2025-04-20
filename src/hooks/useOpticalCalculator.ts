@@ -81,7 +81,7 @@ export const useOpticalCalculator = () => {
     const ejeVl = odVlEje.trim() !== '' ? parseInput(odVlEje) : null;
     const vlCompleto = esferaVl !== null && !isNaN(esferaVl);
     if (vlCompleto && addVal !== null && !isNaN(addVal) && addVal > 0) {
-      setOdVcEsfera(formatNumberInput(esferaVl! + addVal));
+      setOdVcEsfera(formatNumberInput(esferaVl + addVal)); // Corregido: era esferaVl!
       if (cilVl !== null) setOdVcCilindro(formatNumberInput(cilVl));
       if (ejeVl !== null && cilVl !== 0) setOdVcEje(Math.round(ejeVl).toString());
       setHighlightOdVc(true);
@@ -95,7 +95,7 @@ export const useOpticalCalculator = () => {
     const ejeVl = oiVlEje.trim() !== '' ? parseInput(oiVlEje) : null;
     const vlCompleto = esferaVl !== null && !isNaN(esferaVl);
     if (vlCompleto && addVal !== null && !isNaN(addVal) && addVal > 0) {
-      setOiVcEsfera(formatNumberInput(esferaVl! + addVal));
+      setOiVcEsfera(formatNumberInput(esferaVl + addVal)); // Corregido: era esferaVl!
       if (cilVl !== null) setOiVcCilindro(formatNumberInput(cilVl));
       if (ejeVl !== null && cilVl !== 0) setOiVcEje(Math.round(ejeVl).toString());
       setHighlightOiVc(true);
@@ -278,24 +278,16 @@ export const useOpticalCalculator = () => {
     // --- Marcar en rojo los campos relevantes si hay mensajes genéricos de datos incompletos ---
     msgs.forEach(msg => {
       if (msg.startsWith('OD Lejos: Datos incompletos')) {
-        if (rawOdVl.s.trim() === '') errs['odVlEsfera'] = true;
-        if (rawOdVl.c.trim() === '') errs['odVlCilindro'] = true;
-        if (rawOdVl.a.trim() === '') errs['odVlEje'] = true;
+        if (!validatePrescription(odVl, rawOdVl, '', [], errs, true)) {/* Mark relevant empty fields */}
       }
       if (msg.startsWith('OD Cerca: Datos incompletos')) {
-        if (rawOdVc.s.trim() === '') errs['odVcEsfera'] = true;
-        if (rawOdVc.c.trim() === '') errs['odVcCilindro'] = true;
-        if (rawOdVc.a.trim() === '') errs['odVcEje'] = true;
+        if (!validatePrescription(odVc, rawOdVc, '', [], errs, true)) {/* Mark relevant empty fields */}
       }
       if (msg.startsWith('OI Lejos: Datos incompletos')) {
-        if (rawOiVl.s.trim() === '') errs['oiVlEsfera'] = true;
-        if (rawOiVl.c.trim() === '') errs['oiVlCilindro'] = true;
-        if (rawOiVl.a.trim() === '') errs['oiVlEje'] = true;
+        if (!validatePrescription(oiVl, rawOiVl, '', [], errs, true)) {/* Mark relevant empty fields */}
       }
       if (msg.startsWith('OI Cerca: Datos incompletos')) {
-        if (rawOiVc.s.trim() === '') errs['oiVcEsfera'] = true;
-        if (rawOiVc.c.trim() === '') errs['oiVcCilindro'] = true;
-        if (rawOiVc.a.trim() === '') errs['oiVcEje'] = true;
+        if (!validatePrescription(oiVc, rawOiVc, '', [], errs, true)) {/* Mark relevant empty fields */}
       }
     });
 
@@ -322,7 +314,7 @@ export const useOpticalCalculator = () => {
     const errs: FieldErrors = {};
     const msgs: string[] = [];
     let hOdVc = false, hOiVc = false;
-    let hOdAdd = false, hOiAdd = false;
+    let hOdAdd = false, hOiAdd = false; // Ahora hOdAdd se puede reasignar
 
     // 1. Parsear todos los inputs relevantes (ESF incompleto se toma como 0.00)
     const odVl: PrescriptionValues = {
@@ -345,113 +337,168 @@ export const useOpticalCalculator = () => {
       cilindro: parseInput(oiVcCilindro),
       eje: parseInput(oiVcEje)
     };
-    const od_add_val = parseInput(odAdd);
+    const od_add_val = parseInput(odAdd); // Ahora se usará
     const oi_add_val = parseInput(oiAdd);
 
     let odBaseRpi: PrescriptionValues | null = null;
     let oiBaseRpi: PrescriptionValues | null = null;
-    let odSource: 'VC' | 'ADD' | null = null; // Para saber de dónde vino la base
+    let odSource: 'VC' | 'ADD' | null = null; // Ahora se usará para la condición
     let oiSource: 'VC' | 'ADD' | null = null;
 
     // --- Lógica para Ojo Derecho (OD) ---
+    // Prioridad 1: Usar datos de Visión Cercana (VC) si son válidos y completos/compatibles
     const odVcEsferaVal = parseInput(odVcEsfera);
     const odVcHasEsfera = odVcEsferaVal !== null && !isNaN(odVcEsferaVal);
     const odVcHasCil = odVcCilindro.trim() !== '';
     const odVcHasEje = odVcEje.trim() !== '';
+    const rawOdVc = { s: odVcEsfera, c: odVcCilindro, a: odVcEje };
 
     if ((odVcHasEsfera && !odVcHasCil && !odVcHasEje) || (odVcHasCil && odVcHasEje)) {
-      // Permitir cálculo si hay sólo esfera, o si hay CIL y EJE válidos en CERCA
-      odBaseRpi = {
-        esfera: odVcHasEsfera ? odVcEsferaVal! : null,
-        cilindro: odVcHasCil ? parseInput(odVcCilindro) : null,
-        eje: odVcHasEje ? parseInput(odVcEje) : null
-      };
-      odSource = 'VC';
-      hOdVc = true;
-    } else {
-      // Lógica original (Cerca completa)
-      const odVcIsComplete = isCompletePrescription(odVc, { s: odVcEsfera, c: odVcCilindro, a: odVcEje });
-      if (odVcIsComplete && validatePrescription(odVc, { s: odVcEsfera, c: odVcCilindro, a: odVcEje }, 'OD Cerca', msgs, errs, true)) {
-        const odVlIsComplete = isCompletePrescription(odVl, { s: odVlEsfera, c: odVlCilindro, a: odVlEje });
-        if (odVlIsComplete && validatePrescription(odVl, { s: odVlEsfera, c: odVlCilindro, a: odVlEje }, 'OD Lejos', [], {}, true)) {
-          if (arePrescriptionsCompatible(odVl, odVc)) {
-            odBaseRpi = odVc;
+         // Caso 1: Solo esfera en VC es suficiente para intentar calcular
+         if (odVcHasEsfera && !odVcHasCil && !odVcHasEje && validatePrescription({ esfera: odVcEsferaVal, cilindro: null, eje: null }, rawOdVc, 'OD Cerca (Esf)', [], errs, false)) {
+            odBaseRpi = { esfera: odVcEsferaVal, cilindro: null, eje: null };
             odSource = 'VC';
             hOdVc = true;
-            const implicitAdd = odVc.esfera! - odVl.esfera!;
-            if (implicitAdd > 0) {
-              setOdAdd(formatNumberInput(implicitAdd));
-            } else {
-              // Solo mostrar error si ambos (LEJOS y CERCA) tienen ESFERA
-              if (odVc.esfera !== null && odVl.esfera !== null) {
-                msgs.push("OD: Datos de Cerca implican una ADD inválida o cero respecto a Lejos.");
-              }
+         }
+         // Caso 2: CIL y EJE presentes en VC (Esfera es opcional aquí pero debe ser válida si existe)
+         else if (odVcHasCil && odVcHasEje) {
+            const currentOdVc: PrescriptionValues = {
+                esfera: odVcHasEsfera ? odVcEsferaVal : 0, // Default a 0 si no hay esfera explícita pero sí CIL/EJE
+                cilindro: parseInput(odVcCilindro),
+                eje: parseInput(odVcEje)
+            };
+            if (validatePrescription(currentOdVc, rawOdVc, 'OD Cerca', msgs, errs, true)) {
+                 // Validar compatibilidad si Lejos también está completo
+                const rawOdVl = { s: odVlEsfera, c: odVlCilindro, a: odVlEje };
+                const odVlIsComplete = isCompletePrescription(odVl, rawOdVl);
+                if (odVlIsComplete && validatePrescription(odVl, rawOdVl, 'OD Lejos', [], {}, true)) {
+                    if (arePrescriptionsCompatible(odVl, currentOdVc)) {
+                        odBaseRpi = currentOdVc;
+                        odSource = 'VC';
+                        hOdVc = true;
+                        const implicitAdd = (currentOdVc.esfera ?? 0) - (odVl.esfera ?? 0);
+                        if (implicitAdd > 0) {
+                             setOdAdd(formatNumberInput(implicitAdd));
+                             hOdAdd = true; // Marcar Add también si se infiere
+                        } else if ((currentOdVc.esfera !== null && currentOdVc.esfera !== 0) && (odVl.esfera !== null && odVl.esfera !== 0)) {
+                             msgs.push("OD: Datos de Cerca implican una ADD inválida o cero respecto a Lejos.");
+                             if (currentOdVc.esfera !== null) errs['odVcEsfera'] = true;
+                        }
+                    } else {
+                        msgs.push(`OD: ${C.INCOMPATIBILITY_ERROR} entre Lejos y Cerca.`);
+                        if (odVl.cilindro !== currentOdVc.cilindro) errs['odVcCilindro'] = true;
+                        if (odVl.eje !== currentOdVc.eje) errs['odVcEje'] = true;
+                    }
+                } else {
+                    // Usar VC aunque Lejos no esté completo/válido
+                    odBaseRpi = currentOdVc;
+                    odSource = 'VC';
+                    hOdVc = true;
+                }
             }
-          } else {
-            msgs.push(`OD: ${C.INCOMPATIBILITY_ERROR} entre Lejos y Cerca.`);
-            if (odVl.cilindro !== odVc.cilindro) errs['odVcCilindro'] = true;
-            if (odVl.eje !== odVc.eje) errs['odVcEje'] = true;
-          }
-        } else {
-          odBaseRpi = odVc;
-          odSource = 'VC';
-          hOdVc = true;
+         }
+    }
+
+
+    // Prioridad 2: Si no se pudo usar VC, intentar con Visión Lejana (VL) + ADD
+    if (odSource === null) { // <--- ¡Aquí se usa odSource!
+      const rawOdVl = { s: odVlEsfera, c: odVlCilindro, a: odVlEje };
+      const odVlIsValid = validatePrescription(odVl, rawOdVl, 'OD Lejos', msgs, errs, true);
+      const odAddIsValid = od_add_val !== null && !isNaN(od_add_val) && od_add_val > 0;
+
+      if (odVlIsValid && odAddIsValid) {
+        odBaseRpi = {
+          esfera: (odVl.esfera ?? 0) + od_add_val, // <--- ¡Aquí se usa od_add_val!
+          cilindro: odVl.cilindro,
+          eje: odVl.eje
+        };
+        odSource = 'ADD';
+        hOdAdd = true; // <--- ¡Aquí se reasigna hOdAdd!
+        hOdVc = true; // Marcar VC porque se autocompletará
+        // Autocompletar VC
+        setOdVcEsfera(formatNumberInput(odBaseRpi.esfera));
+        setOdVcCilindro(formatNumberInput(odBaseRpi.cilindro));
+        setOdVcEje(odBaseRpi.eje !== null && odBaseRpi.cilindro !== 0 ? Math.round(odBaseRpi.eje).toString() : '');
+      } else {
+        // Si no se puede calcular ni por VC ni por VL+ADD, y VC no estaba vacío, añadir error específico
+        if (odVcEsfera.trim() || odVcCilindro.trim() || odVcEje.trim()) {
+             if (!msgs.some(m => m.startsWith('OD Cerca:'))) { // Evitar duplicados
+                 msgs.push("OD Cerca: Datos incompletos o inválidos. Complete todos los campos de Cerca o use Lejos y ADD.");
+                 validatePrescription(odVc, rawOdVc, 'OD Cerca', [], errs, true); // Para marcar campos rojos
+             }
+        } else { // Si VC estaba vacío, indicar qué falta de VL o ADD
+             if (!odVlIsValid && !msgs.some(m => m.startsWith('OD Lejos'))) msgs.push("OD Lejos: Datos incompletos o inválidos.");
+             if (!odAddIsValid && !msgs.some(m => m.startsWith('OD ADD'))) {
+                 msgs.push("OD ADD: Valor inválido o ausente.");
+                 // Marcar ADD en rojo solo si se intentó poner algo inválido, no si está vacío
+                 if (odAdd.trim() !== '' && (od_add_val === null || isNaN(od_add_val) || od_add_val <= 0)) {
+                     errs['odAdd'] = true;
+                 }
+             }
         }
       }
     }
 
-    // --- Lógica para Ojo Izquierdo (OI) --- (Similar a OD)
+
+    // --- Lógica para Ojo Izquierdo (OI) --- (Similar a OD, ya estaba mayormente correcta)
     const oiVcEsferaVal = parseInput(oiVcEsfera);
     const oiVcHasEsfera = oiVcEsferaVal !== null && !isNaN(oiVcEsferaVal);
     const oiVcHasCil = oiVcCilindro.trim() !== '';
     const oiVcHasEje = oiVcEje.trim() !== '';
+    const rawOiVc = { s: oiVcEsfera, c: oiVcCilindro, a: oiVcEje };
+
 
     if ((oiVcHasEsfera && !oiVcHasCil && !oiVcHasEje) || (oiVcHasCil && oiVcHasEje)) {
-      // Permitir cálculo si hay sólo esfera, o si hay CIL y EJE válidos en CERCA
-      oiBaseRpi = {
-        esfera: oiVcHasEsfera ? oiVcEsferaVal! : null,
-        cilindro: oiVcHasCil ? parseInput(oiVcCilindro) : null,
-        eje: oiVcHasEje ? parseInput(oiVcEje) : null
-      };
-      oiSource = 'VC';
-      hOiVc = true;
-    } else {
-      const oiVcIsComplete = isCompletePrescription(oiVc, { s: oiVcEsfera, c: oiVcCilindro, a: oiVcEje });
-      if (oiVcIsComplete && validatePrescription(oiVc, { s: oiVcEsfera, c: oiVcCilindro, a: oiVcEje }, 'OI Cerca', msgs, errs, true)) {
-        const oiVlIsComplete = isCompletePrescription(oiVl, { s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje });
-        if (oiVlIsComplete && validatePrescription(oiVl, { s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje }, 'OI Lejos', [], {}, true)) {
-          if (arePrescriptionsCompatible(oiVl, oiVc)) {
-            oiBaseRpi = oiVc;
+         if (oiVcHasEsfera && !oiVcHasCil && !oiVcHasEje && validatePrescription({ esfera: oiVcEsferaVal, cilindro: null, eje: null }, rawOiVc, 'OI Cerca (Esf)', [], errs, false)) {
+            oiBaseRpi = { esfera: oiVcEsferaVal, cilindro: null, eje: null };
             oiSource = 'VC';
             hOiVc = true;
-            const implicitAdd = oiVc.esfera! - oiVl.esfera!;
-            if (implicitAdd > 0) {
-              setOiAdd(formatNumberInput(implicitAdd));
-            } else {
-              // Solo mostrar error si ambos (LEJOS y CERCA) tienen ESFERA
-              if (oiVc.esfera !== null && oiVl.esfera !== null) {
-                msgs.push("OI: Datos de Cerca implican una ADD inválida o cero respecto a Lejos.");
-              }
+         }
+         else if (oiVcHasCil && oiVcHasEje) {
+            const currentOiVc: PrescriptionValues = {
+                esfera: oiVcHasEsfera ? oiVcEsferaVal : 0,
+                cilindro: parseInput(oiVcCilindro),
+                eje: parseInput(oiVcEje)
+            };
+             if (validatePrescription(currentOiVc, rawOiVc, 'OI Cerca', msgs, errs, true)) {
+                const rawOiVl = { s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje };
+                const oiVlIsComplete = isCompletePrescription(oiVl, rawOiVl);
+                if (oiVlIsComplete && validatePrescription(oiVl, rawOiVl, 'OI Lejos', [], {}, true)) {
+                    if (arePrescriptionsCompatible(oiVl, currentOiVc)) {
+                        oiBaseRpi = currentOiVc;
+                        oiSource = 'VC';
+                        hOiVc = true;
+                        const implicitAdd = (currentOiVc.esfera ?? 0) - (oiVl.esfera ?? 0);
+                        if (implicitAdd > 0) {
+                            setOiAdd(formatNumberInput(implicitAdd));
+                            hOiAdd = true;
+                        } else if ((currentOiVc.esfera !== null && currentOiVc.esfera !== 0) && (oiVl.esfera !== null && oiVl.esfera !== 0)) {
+                            msgs.push("OI: Datos de Cerca implican una ADD inválida o cero respecto a Lejos.");
+                             if (currentOiVc.esfera !== null) errs['oiVcEsfera'] = true;
+                        }
+                    } else {
+                        msgs.push(`OI: ${C.INCOMPATIBILITY_ERROR} entre Lejos y Cerca.`);
+                        if (oiVl.cilindro !== currentOiVc.cilindro) errs['oiVcCilindro'] = true;
+                        if (oiVl.eje !== currentOiVc.eje) errs['oiVcEje'] = true;
+                    }
+                } else {
+                    oiBaseRpi = currentOiVc;
+                    oiSource = 'VC';
+                    hOiVc = true;
+                }
             }
-          } else {
-            msgs.push(`OI: ${C.INCOMPATIBILITY_ERROR} entre Lejos y Cerca.`);
-            if (oiVl.cilindro !== oiVc.cilindro) errs['oiVcCilindro'] = true;
-            if (oiVl.eje !== oiVc.eje) errs['oiVcEje'] = true;
-          }
-        } else {
-          oiBaseRpi = oiVc;
-          oiSource = 'VC';
-          hOiVc = true;
-        }
-      }
+         }
     }
+
+    // Prioridad 2: OI con VL + ADD
     if (oiSource === null) {
-      const oiVlIsValid = validatePrescription(oiVl, { s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje }, 'OI Lejos', msgs, errs, true);
+      const rawOiVl = { s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje };
+      const oiVlIsValid = validatePrescription(oiVl, rawOiVl, 'OI Lejos', msgs, errs, true);
       const oiAddIsValid = oi_add_val !== null && !isNaN(oi_add_val) && oi_add_val > 0;
 
       if (oiVlIsValid && oiAddIsValid) {
         oiBaseRpi = {
-          esfera: oiVl.esfera! + oi_add_val,
+          esfera: (oiVl.esfera ?? 0) + oi_add_val,
           cilindro: oiVl.cilindro,
           eje: oiVl.eje
         };
@@ -462,97 +509,94 @@ export const useOpticalCalculator = () => {
         setOiVcCilindro(formatNumberInput(oiBaseRpi.cilindro));
         setOiVcEje(oiBaseRpi.eje !== null && oiBaseRpi.cilindro !== 0 ? Math.round(oiBaseRpi.eje).toString() : '');
       } else {
-        if (!oiVcEsfera.trim() && !oiVcCilindro.trim() && !oiVcEje.trim()) {
-          if (!oiVlIsValid) msgs.push("OI Lejos: Datos incompletos o inválidos.");
-          if (!oiAddIsValid) {
-            msgs.push("OI ADD: Valor inválido o ausente.");
-            if (oiAdd.trim() !== '') errs['oiAdd'] = true;
-          }
+        if (oiVcEsfera.trim() || oiVcCilindro.trim() || oiVcEje.trim()) {
+             if (!msgs.some(m => m.startsWith('OI Cerca:'))) {
+                 msgs.push("OI Cerca: Datos incompletos o inválidos. Complete todos los campos de Cerca o use Lejos y ADD.");
+                 validatePrescription(oiVc, rawOiVc, 'OI Cerca', [], errs, true);
+             }
         } else {
-          msgs.push("OI Cerca: Datos incompletos. Complete todos los campos de Cerca o use Lejos y ADD.");
-          validatePrescription(oiVc, { s: oiVcEsfera, c: oiVcCilindro, a: oiVcEje }, 'OI Cerca', [], errs, true);
+            if (!oiVlIsValid && !msgs.some(m => m.startsWith('OI Lejos'))) msgs.push("OI Lejos: Datos incompletos o inválidos.");
+            if (!oiAddIsValid && !msgs.some(m => m.startsWith('OI ADD'))) {
+                msgs.push("OI ADD: Valor inválido o ausente.");
+                 if (oiAdd.trim() !== '' && (oi_add_val === null || isNaN(oi_add_val) || oi_add_val <= 0)) {
+                     errs['oiAdd'] = true;
+                 }
+            }
         }
       }
     }
 
-    // 3. Calcular RPI si tenemos bases válidas
+    // 3. Calcular RPI final si tenemos bases válidas
     let finalOdPi075: string | null = null;
     let finalOdPi125: string | null = null;
     let finalOiPi075: string | null = null;
     let finalOiPi125: string | null = null;
 
-    if (odBaseRpi !== null) {
-      const odPi075 = { esfera: odBaseRpi.esfera! - 0.75, cilindro: odBaseRpi.cilindro, eje: odBaseRpi.eje };
-      const odPi125 = { esfera: odBaseRpi.esfera! - 1.25, cilindro: odBaseRpi.cilindro, eje: odBaseRpi.eje };
+    if (odBaseRpi !== null && odBaseRpi.esfera !== null) { // Asegurarse que la esfera base existe
+      const odPi075 = { esfera: odBaseRpi.esfera - 0.75, cilindro: odBaseRpi.cilindro, eje: odBaseRpi.eje };
+      const odPi125 = { esfera: odBaseRpi.esfera - 1.25, cilindro: odBaseRpi.cilindro, eje: odBaseRpi.eje };
       finalOdPi075 = formatPrescriptionResult(odPi075);
       finalOdPi125 = formatPrescriptionResult(odPi125);
-    } else if (!msgs.some(m => m.startsWith('OD:'))) {
-      msgs.push(`OD: ${C.INSUFFICIENT_DATA_RPI_ERROR}`);
+    } else if (odSource === null && !msgs.some(m => m.startsWith('OD:'))) { // Si no hay base Y no hay error específico previo
+         // Solo agregar error genérico si no se reportó uno más específico antes
+        msgs.push(`OD: ${C.INSUFFICIENT_DATA_RPI_ERROR}`);
     }
 
-    if (oiBaseRpi !== null) {
-      const oiPi075 = { esfera: oiBaseRpi.esfera! - 0.75, cilindro: oiBaseRpi.cilindro, eje: oiBaseRpi.eje };
-      const oiPi125 = { esfera: oiBaseRpi.esfera! - 1.25, cilindro: oiBaseRpi.cilindro, eje: oiBaseRpi.eje };
+
+    if (oiBaseRpi !== null && oiBaseRpi.esfera !== null) { // Asegurarse que la esfera base existe
+      const oiPi075 = { esfera: oiBaseRpi.esfera - 0.75, cilindro: oiBaseRpi.cilindro, eje: oiBaseRpi.eje };
+      const oiPi125 = { esfera: oiBaseRpi.esfera - 1.25, cilindro: oiBaseRpi.cilindro, eje: oiBaseRpi.eje };
       finalOiPi075 = formatPrescriptionResult(oiPi075);
       finalOiPi125 = formatPrescriptionResult(oiPi125);
-    } else if (!msgs.some(m => m.startsWith('OI:'))) {
-      msgs.push(`OI: ${C.INSUFFICIENT_DATA_RPI_ERROR}`);
+    } else if (oiSource === null && !msgs.some(m => m.startsWith('OI:'))) {
+        msgs.push(`OI: ${C.INSUFFICIENT_DATA_RPI_ERROR}`);
     }
 
-    // --- Marcar en rojo los campos relevantes si hay mensajes genéricos de datos insuficientes ---
-    msgs.forEach(msg => {
-      if (msg.startsWith('OD:') && msg.includes('insuficientes')) {
-        if (odVlEsfera.trim() === '') errs['odVlEsfera'] = true;
-        if (odVlCilindro.trim() !== '') errs['odVlCilindro'] = true;
-        if (odVlEje.trim() !== '') errs['odVlEje'] = true;
-        if (odAdd.trim() === '') errs['odAdd'] = true;
-        if (odVcEsfera.trim() === '') errs['odVcEsfera'] = true;
-        if (odVcCilindro.trim() !== '') errs['odVcCilindro'] = true;
-        if (odVcEje.trim() !== '') errs['odVcEje'] = true;
-      }
-      if (msg.startsWith('OI:') && msg.includes('insuficientes')) {
-        if (oiVlEsfera.trim() === '') errs['oiVlEsfera'] = true;
-        if (oiVlCilindro.trim() !== '') errs['oiVlCilindro'] = true;
-        if (oiVlEje.trim() !== '') errs['oiVlEje'] = true;
-        if (oiAdd.trim() === '') errs['oiAdd'] = true;
-        if (oiVcEsfera.trim() === '') errs['oiVcEsfera'] = true;
-        if (oiVcCilindro.trim() !== '') errs['oiVcCilindro'] = true;
-        if (oiVcEje.trim() !== '') errs['oiVcEje'] = true;
-      }
-      if (msg.startsWith('OD Cerca: Datos incompletos')) {
-        if (odVcEsfera.trim() === '') errs['odVcEsfera'] = true;
-        if (odVcCilindro.trim() !== '') errs['odVcCilindro'] = true;
-        if (odVcEje.trim() !== '') errs['odVcEje'] = true;
-      }
-      if (msg.startsWith('OI Cerca: Datos incompletos')) {
-        if (oiVcEsfera.trim() === '') errs['oiVcEsfera'] = true;
-        if (oiVcCilindro.trim() !== '') errs['oiVcCilindro'] = true;
-        if (oiVcEje.trim() !== '') errs['oiVcEje'] = true;
-      }
-      if (msg.startsWith('OD Lejos: Datos incompletos')) {
-        if (odVlEsfera.trim() === '') errs['odVlEsfera'] = true;
-        if (odVlCilindro.trim() !== '') errs['odVlCilindro'] = true;
-        if (odVlEje.trim() !== '') errs['odVlEje'] = true;
-      }
-      if (msg.startsWith('OI Lejos: Datos incompletos')) {
-        if (oiVlEsfera.trim() === '') errs['oiVlEsfera'] = true;
-        if (oiVlCilindro.trim() !== '') errs['oiVlCilindro'] = true;
-        if (oiVlEje.trim() !== '') errs['oiVlEje'] = true;
-      }
-      if (msg.startsWith('OD ADD: Valor inválido') && odAdd.trim() === '') errs['odAdd'] = true;
-      if (msg.startsWith('OI ADD: Valor inválido') && oiAdd.trim() === '') errs['oiAdd'] = true;
+
+    // --- Marcar campos rojos basado en errores específicos y genéricos ---
+    // (Esta lógica podría refinarse, pero mantenemos la estructura original por ahora)
+     msgs.forEach(msg => {
+        // Marcar campos si hay errores de datos incompletos o inválidos
+        if (msg.includes('OD Lejos: Datos incompletos') || (msg.startsWith('OD:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) {
+             const tempErrs: FieldErrors = {};
+             validatePrescription(odVl, {s: odVlEsfera, c: odVlCilindro, a: odVlEje}, '', [], tempErrs, true);
+             Object.assign(errs, tempErrs);
+        }
+        if (msg.includes('OI Lejos: Datos incompletos') || (msg.startsWith('OI:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) {
+            const tempErrs: FieldErrors = {};
+            validatePrescription(oiVl, {s: oiVlEsfera, c: oiVlCilindro, a: oiVlEje}, '', [], tempErrs, true);
+            Object.assign(errs, tempErrs);
+        }
+         if (msg.includes('OD Cerca: Datos incompletos') || (msg.startsWith('OD:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) {
+             const tempErrs: FieldErrors = {};
+             validatePrescription(odVc, {s: odVcEsfera, c: odVcCilindro, a: odVcEje}, '', [], tempErrs, true);
+             Object.assign(errs, tempErrs);
+        }
+        if (msg.includes('OI Cerca: Datos incompletos') || (msg.startsWith('OI:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) {
+            const tempErrs: FieldErrors = {};
+            validatePrescription(oiVc, {s: oiVcEsfera, c: oiVcCilindro, a: oiVcEje}, '', [], tempErrs, true);
+            Object.assign(errs, tempErrs);
+        }
+        if ((msg.includes('OD ADD: Valor inválido') || (msg.startsWith('OD:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) && odAdd.trim() === '') {
+             errs['odAdd'] = true; // Marcar add vacío si es necesario para RPI
+         }
+        if ((msg.includes('OI ADD: Valor inválido') || (msg.startsWith('OI:') && msg.includes(C.INSUFFICIENT_DATA_RPI_ERROR))) && oiAdd.trim() === '') {
+             errs['oiAdd'] = true; // Marcar add vacío si es necesario para RPI
+         }
     });
+
 
     // 4. Actualizar Estados de Resultados, Errores y Highlights
     setResultOD_PI_075(finalOdPi075);
     setResultOD_PI_125(finalOdPi125);
     setResultOI_PI_075(finalOiPi075);
     setResultOI_PI_125(finalOiPi125);
-    setErrorMessages(msgs);
+    // Filtrar mensajes duplicados antes de setear
+    setErrorMessages(Array.from(new Set(msgs)));
     setFieldErrors(errs);
-    setHighlightOdVc(hOdVc); // Highlight basado en la fuente real
+    setHighlightOdVc(hOdVc); // Highlight basado en la fuente real o autocompletado
     setHighlightOiVc(hOiVc);
-    setHighlightOdAdd(hOdAdd); // Highlight ADD si fue la fuente
+    setHighlightOdAdd(hOdAdd); // Highlight ADD si fue la fuente o inferido
     setHighlightOiAdd(hOiAdd);
 
   }, [
