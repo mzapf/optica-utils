@@ -558,8 +558,6 @@ export const useOpticalCalculator = () => {
   }, [
     odVlEsfera, odVlCilindro, odVlEje, odAdd, odVcEsfera, odVcCilindro, odVcEje,
     oiVlEsfera, oiVlCilindro, oiVlEje, oiAdd, oiVcEsfera, oiVcCilindro, oiVcEje,
-    setOdAdd, setOiAdd, setOdVcEsfera, setOdVcCilindro, setOdVcEje,
-    setOiVcEsfera, setOiVcCilindro, setOiVcEje,
     clearResultsAndErrors // Dependencia explícita
   ]);
 
