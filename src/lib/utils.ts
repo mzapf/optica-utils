@@ -27,7 +27,7 @@ export const isCompletePrescription = (p: PrescriptionValues, raw: {s: string, c
 };
 
 export const parseInput = (value: string): number | null => {
-    if (value === null || value.trim() === '') return null;
+    if (value === null || value.trim() === '') return 0; // Asumir 0.00 si está vacío
     const match = value.trim().match(/^[+-]?(\d+([.,]\d*)?|[.,]\d+)/);
     if (!match) return NaN;
     const sanitizedValue = match[0].replace(',', '.');

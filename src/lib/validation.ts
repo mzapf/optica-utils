@@ -18,17 +18,16 @@ export const validatePrescription = (
 
     // Validar Esfera
     const hasEsferaInput = inputs.s.trim() !== '';
-    const isEsferaValidNumber = p.esfera !== null && !isNaN(p.esfera);
+    // Si el input está vacío, tratamos la esfera como 0 y válida
+    const isEsferaValidNumber = (inputs.s.trim() === '' && (p.esfera === 0 || p.esfera === null)) || (p.esfera !== null && !isNaN(p.esfera));
 
     if (hasEsferaInput && !isEsferaValidNumber) {
         errors.push(`${prefix} Esfera: ${C.NUMERIC_ERROR}`);
         fieldErrs[esferaField] = true;
         isValid = false;
     } else if (isRequired && !hasEsferaInput) {
-        // Solo marcar error si es requerido y no hay input
-        errors.push(`${prefix} Esfera: ${C.REQUIRED_ERROR}`);
-        fieldErrs[esferaField] = true;
-        isValid = false;
+        // Si es requerido pero está vacío, NO marcar error, tratar como 0
+        // No hacer nada, es válido
     } else if (isRequired && hasEsferaInput && !isEsferaValidNumber) {
         // Caso: requerido, con input, pero inválido
         errors.push(`${prefix} Esfera: ${C.NUMERIC_ERROR}`);

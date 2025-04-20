@@ -115,7 +115,13 @@ export default function Home() {
                                 </div>
                             </div>
                             <div className="pt-1 text-center sm:text-right">
-                                <Button type="button" variant="outline" size="sm" onClick={handleCalculateAdd} className="shadow-sm">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="lg"
+                                    className="px-12 sm:px-16 text-base sm:text-lg w-full sm:w-auto tracking-wide font-semibold shadow-md hover:shadow-lg transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                                    onClick={handleCalculateAdd}
+                                >
                                     <Calculator className="mr-2 h-4 w-4" /> Calcular ADD
                                 </Button>
                             </div>
@@ -200,8 +206,14 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter className="flex justify-center p-5 border-t dark:border-gray-700 mt-6 bg-gray-50 dark:bg-gray-800/50 rounded-b-lg">
-                    <Button onClick={handleCalculateRpi} size="lg" className="px-12 sm:px-16 text-base sm:text-lg w-full sm:w-auto tracking-wide font-semibold shadow-md hover:shadow-lg transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">
-                        Calcular RPI
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="lg"
+                        className="px-12 sm:px-16 text-base sm:text-lg w-full sm:w-auto tracking-wide font-semibold shadow-md hover:shadow-lg transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                        onClick={handleCalculateRpi}
+                    >
+                        <Calculator className="mr-2 h-4 w-4" /> Calcular RPI
                     </Button>
                 </CardFooter>
             </Card>
@@ -219,7 +231,6 @@ export default function Home() {
                 </Link>
             </footer>
 
-             {/* Opcional: Añadir CSS para animaciones */}
              <style jsx global>{`
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
                 .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
