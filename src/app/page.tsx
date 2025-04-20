@@ -65,7 +65,9 @@ export default function Home() {
             <Card className="w-full max-w-xl shadow-xl border dark:border-gray-700 bg-white dark:bg-gray-900">
                 <CardHeader className="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-t-lg border-b dark:border-gray-700">
                     <CardTitle className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">Calculadora Óptica</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">Calculadora de adición (ADD) y regresión (RPI)</CardDescription>
+                    <CardDescription className="text-gray-600 dark:text-gray-400">Calculadora de inversión, adición (ADD) y regresión
+                        (RPI)
+                    </CardDescription>
                 </CardHeader>
 
                 <CardContent className="p-5 sm:p-6 space-y-6">
