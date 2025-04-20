@@ -13,16 +13,14 @@ export function cn(...inputs: ClassValue[]) {
 export const isCompletePrescription = (p: PrescriptionValues, raw: {s: string, c: string, a: string}): boolean => {
     // Considerar ESF vacía como 0.00 para cálculos
     const hasEsfera = (raw.s.trim() !== '' || raw.s.trim() === '') && (p.esfera !== null && !isNaN(p.esfera));
-    const hasCilindro = raw.c.trim() !== '' && p.cilindro !== null && !isNaN(p.cilindro);
+    const hasCilindro = raw.c.trim() !== '' && p.cilindro !== null && !isNaN(p.cilindro) && p.cilindro !== 0;
     const hasEje = raw.a.trim() !== '' && p.eje !== null && !isNaN(p.eje);
 
     if (!hasEsfera) return false; // Esfera siempre necesaria (pero ahora siempre true)
-    if (hasCilindro && !hasEje) return false; // Si hay cilindro, debe haber eje
-    if (!hasCilindro && hasEje) return false; // Si no hay cilindro, no debe haber eje (o eje debe ser ignorado)
+    if (hasCilindro && !hasEje) return false; // Si hay cilindro distinto de 0, debe haber eje
+    if (!hasCilindro && hasEje) return false; // Si no hay cilindro (o es 0), no debe haber eje
     // Considerar cilindro 0 como sin cilindro
-    if (p.cilindro === 0 && hasEje) return false;
-    if (p.cilindro !== 0 && !hasEje) return false;
-
+    // Si Cilindro es 0, ignorar Eje
     return true;
 };
 

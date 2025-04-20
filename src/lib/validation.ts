@@ -18,7 +18,6 @@ export const validatePrescription = (
 
     // Validar Esfera
     const hasEsferaInput = inputs.s.trim() !== '';
-    // Si el input está vacío, tratamos la esfera como 0 y válida
     const isEsferaValidNumber = (inputs.s.trim() === '' && (p.esfera === 0 || p.esfera === null)) || (p.esfera !== null && !isNaN(p.esfera));
 
     if (hasEsferaInput && !isEsferaValidNumber) {
@@ -38,9 +37,9 @@ export const validatePrescription = (
     // Validar Cilindro y Eje
     const hasCilInput = inputs.c.trim() !== '';
     const hasEjeInput = inputs.a.trim() !== '';
-    const isCilValidNumber = p.cilindro !== null && !isNaN(p.cilindro);
-    const isEjeValidNumber = p.eje !== null && !isNaN(p.eje);
-    const cilValue = p.cilindro ?? 0; // Tratar null como 0 para lógica
+    const isCilValidNumber = hasCilInput ? (p.cilindro !== null && !isNaN(p.cilindro)) : true;
+    const isEjeValidNumber = hasEjeInput ? (p.eje !== null && !isNaN(p.eje)) : true;
+    const cilValue = hasCilInput ? (p.cilindro ?? 0) : 0;
 
     if (hasCilInput && !isCilValidNumber) {
         errors.push(`${prefix} Cilindro: ${C.NUMERIC_ERROR}`);
@@ -52,27 +51,24 @@ export const validatePrescription = (
         fieldErrs[ejeField] = true;
         isValid = false;
     }
-
-    if (isCilValidNumber && cilValue !== 0) {
-        // Si hay cilindro válido distinto de cero, se necesita eje válido
-        if (!isEjeValidNumber) {
-            // Si hay input de eje O input de cilindro, el eje era esperado
-            if (hasEjeInput || hasCilInput) {
-                 errors.push(`${prefix} Eje: ${C.AXIS_REQUIRED_ERROR}`);
-                 fieldErrs[ejeField] = true; isValid = false;
-            }
+    // Solo si hay CIL distinto de 0, exigir EJE válido
+    if (hasCilInput && isCilValidNumber && cilValue !== 0) {
+        if (!hasEjeInput || !isEjeValidNumber) {
+            errors.push(`${prefix} Eje: ${C.AXIS_REQUIRED_ERROR}`);
+            fieldErrs[ejeField] = true;
+            isValid = false;
         } else if (p.eje !== null && (p.eje <= 0 || p.eje > 180)) {
-            // Si hay eje válido, debe estar en rango
-             errors.push(`${prefix} Eje: ${C.AXIS_RANGE_ERROR}`);
-             fieldErrs[ejeField] = true; isValid = false;
+            errors.push(`${prefix} Eje: ${C.AXIS_RANGE_ERROR}`);
+            fieldErrs[ejeField] = true;
+            isValid = false;
         }
-    } else if (isEjeValidNumber) {
-        // No puede haber eje válido si el cilindro es 0 o inválido/ausente
-         errors.push(`${prefix} Eje: ${C.AXIS_WITHOUT_CYL_ERROR}`);
-         // Marcar error en eje y potencialmente cilindro si hubo inputs
-         if(hasEjeInput) fieldErrs[ejeField] = true;
-         if(hasCilInput || hasEjeInput) fieldErrs[cilindroField] = true;
-         isValid = false;
+    }
+    // Si hay EJE pero no hay CIL válido distinto de 0, marcar error
+    if (hasEjeInput && (!hasCilInput || cilValue === 0)) {
+        errors.push(`${prefix} Eje: ${C.AXIS_WITHOUT_CYL_ERROR}`);
+        fieldErrs[ejeField] = true;
+        if (hasCilInput) fieldErrs[cilindroField] = true;
+        isValid = false;
     }
 
     // Asegurarse que si un campo es requerido y válido pero la prescripción general no (ej. falta eje), se marque el campo requerido

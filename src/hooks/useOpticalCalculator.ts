@@ -41,53 +41,50 @@ export const useOpticalCalculator = () => {
   const [highlightOdVc, setHighlightOdVc] = useState(false);
   const [highlightOiVc, setHighlightOiVc] = useState(false);
 
+  // --- Sincronización automática de CIL/EJE entre Lejos y Cerca ---
+  useEffect(() => {
+    // OD: Si el usuario edita CIL/EJE en Cerca, sincronizar a Lejos si Lejos está vacío
+    if (odVcCilindro.trim() !== '' && odVlCilindro.trim() === '') setOdVlCilindro(odVcCilindro);
+    if (odVcEje.trim() !== '' && odVlEje.trim() === '') setOdVlEje(odVcEje);
+    // OD: Si el usuario edita CIL/EJE en Lejos, sincronizar a Cerca si Cerca está vacío
+    if (odVlCilindro.trim() !== '' && odVcCilindro.trim() === '') setOdVcCilindro(odVlCilindro);
+    if (odVlEje.trim() !== '' && odVcEje.trim() === '') setOdVcEje(odVlEje);
+    // OI: Igual lógica
+    if (oiVcCilindro.trim() !== '' && oiVlCilindro.trim() === '') setOiVlCilindro(oiVcCilindro);
+    if (oiVcEje.trim() !== '' && oiVlEje.trim() === '') setOiVlEje(oiVcEje);
+    if (oiVlCilindro.trim() !== '' && oiVcCilindro.trim() === '') setOiVcCilindro(oiVlCilindro);
+    if (oiVlEje.trim() !== '' && oiVcEje.trim() === '') setOiVcEje(oiVlEje);
+  }, [odVcCilindro, odVcEje, odVlCilindro, odVlEje, oiVcCilindro, oiVcEje, oiVlCilindro, oiVlEje]);
+
   // --- Auto-cálculo de Visión Cercana (VC) cuando cambian Lejos + ADD ---
-  // Esta lógica puede entrar en conflicto si el usuario edita Cerca manualmente después.
-  // Considera si este auto-cálculo es deseado o si debería ser más explícito.
   useEffect(() => {
     const esferaVl = parseInput(odVlEsfera);
     const addVal = parseInput(odAdd);
-    const cilVl = parseInput(odVlCilindro); // Parsear cilindro
-    const ejeVl = parseInput(odVlEje); // Parsear eje
-
-    // Solo auto-calcular si Lejos está completo y ADD es válido
-    const vlCompleto = esferaVl !== null && !isNaN(esferaVl) &&
-                       (cilVl === null || isNaN(cilVl) || cilVl === 0 || (ejeVl !== null && !isNaN(ejeVl)));
-
+    // No autocompletar CIL/EJE con 0.00, solo si existen en Lejos
+    const cilVl = odVlCilindro.trim() !== '' ? parseInput(odVlCilindro) : null;
+    const ejeVl = odVlEje.trim() !== '' ? parseInput(odVlEje) : null;
+    const vlCompleto = esferaVl !== null && !isNaN(esferaVl);
     if (vlCompleto && addVal !== null && !isNaN(addVal) && addVal > 0) {
       setOdVcEsfera(formatNumberInput(esferaVl! + addVal));
-      setOdVcCilindro(formatNumberInput(cilVl)); // Usar el cilindro parseado
-      setOdVcEje(ejeVl !== null && !isNaN(ejeVl) && cilVl !== 0 ? Math.round(ejeVl).toString() : ''); // Solo poner eje si hay cilindro
+      if (cilVl !== null) setOdVcCilindro(formatNumberInput(cilVl));
+      if (ejeVl !== null && cilVl !== 0) setOdVcEje(Math.round(ejeVl).toString());
       setHighlightOdVc(true);
     }
-    // Si ADD se borra o es inválido, no necesariamente borrar Cerca, el usuario podría estar ingresándolo manualmente.
-    // else {
-    //   // Opcional: Limpiar Cerca si ADD se vuelve inválido? Podría ser molesto.
-    //   // setOdVcEsfera(''); setOdVcCilindro(''); setOdVcEje('');
-    // }
   }, [odVlEsfera, odVlCilindro, odVlEje, odAdd]);
 
   useEffect(() => {
     const esferaVl = parseInput(oiVlEsfera);
     const addVal = parseInput(oiAdd);
-    const cilVl = parseInput(oiVlCilindro);
-    const ejeVl = parseInput(oiVlEje);
-
-    const vlCompleto = esferaVl !== null && !isNaN(esferaVl) &&
-                       (cilVl === null || isNaN(cilVl) || cilVl === 0 || (ejeVl !== null && !isNaN(ejeVl)));
-
+    const cilVl = oiVlCilindro.trim() !== '' ? parseInput(oiVlCilindro) : null;
+    const ejeVl = oiVlEje.trim() !== '' ? parseInput(oiVlEje) : null;
+    const vlCompleto = esferaVl !== null && !isNaN(esferaVl);
     if (vlCompleto && addVal !== null && !isNaN(addVal) && addVal > 0) {
       setOiVcEsfera(formatNumberInput(esferaVl! + addVal));
-      setOiVcCilindro(formatNumberInput(cilVl));
-      setOiVcEje(ejeVl !== null && !isNaN(ejeVl) && cilVl !== 0 ? Math.round(ejeVl).toString() : '');
+      if (cilVl !== null) setOiVcCilindro(formatNumberInput(cilVl));
+      if (ejeVl !== null && cilVl !== 0) setOiVcEje(Math.round(ejeVl).toString());
       setHighlightOiVc(true);
     }
-    // else {
-    //   // Opcional: Limpiar Cerca si ADD se vuelve inválido?
-    //   // setOiVcEsfera(''); setOiVcCilindro(''); setOiVcEje('');
-    // }
   }, [oiVlEsfera, oiVlCilindro, oiVlEje, oiAdd]);
-
 
   // --- Funciones internas comunes ---
   const clearHighlights = useCallback(() => {
