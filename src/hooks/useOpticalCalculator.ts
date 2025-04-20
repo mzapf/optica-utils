@@ -186,7 +186,7 @@ export const useOpticalCalculator = () => {
     clearResultsAndErrors();
     const errs: FieldErrors = {};
     const msgs: string[] = [];
-    let hOdAdd = false, hOiAdd = false;
+    let hOiAdd = false;
     let hOdVc = false, hOiVc = false;
 
     // 1. Parsear Inputs (ESF incompleto se toma como 0.00)
@@ -237,7 +237,6 @@ export const useOpticalCalculator = () => {
         errs['odVcEsfera'] = true;
         calculatedOdAdd = null;
       } else {
-        hOdAdd = true;
         hOdVc = true;
       }
     } else {
@@ -302,10 +301,9 @@ export const useOpticalCalculator = () => {
     // 5. Actualizar Estados
     setOdAdd(formatNumberInput(calculatedOdAdd));
     setOiAdd(formatNumberInput(calculatedOiAdd));
-    setHighlightOdAdd(hOdAdd);
-    setHighlightOiAdd(hOiAdd);
     setHighlightOdVc(hOdVc); // Highlight Cerca si se usó para calcular ADD
     setHighlightOiVc(hOiVc);
+    setHighlightOiAdd(hOiAdd);
     setErrorMessages(msgs);
     setFieldErrors(errs);
 
@@ -314,7 +312,6 @@ export const useOpticalCalculator = () => {
     oiVlEsfera, oiVlCilindro, oiVlEje, oiVcEsfera, oiVcCilindro, oiVcEje,
     clearResultsAndErrors // Dependencia explícita
   ]);
-
 
   // --- Cálculo RPI ---
   const handleCalculateRpi = useCallback(() => {
@@ -345,12 +342,10 @@ export const useOpticalCalculator = () => {
       cilindro: parseInput(oiVcCilindro),
       eje: parseInput(oiVcEje)
     };
-    const od_add_val = parseInput(odAdd);
     const oi_add_val = parseInput(oiAdd);
 
     let odBaseRpi: PrescriptionValues | null = null;
     let oiBaseRpi: PrescriptionValues | null = null;
-    let odSource: 'VC' | 'ADD' | null = null; // Para saber de dónde vino la base
     let oiSource: 'VC' | 'ADD' | null = null;
 
     // --- Lógica para Ojo Derecho (OD) ---
@@ -366,7 +361,6 @@ export const useOpticalCalculator = () => {
         cilindro: odVcHasCil ? parseInput(odVcCilindro) : null,
         eje: odVcHasEje ? parseInput(odVcEje) : null
       };
-      odSource = 'VC';
       hOdVc = true;
     } else {
       // Lógica original (Cerca completa)
@@ -376,7 +370,6 @@ export const useOpticalCalculator = () => {
         if (odVlIsComplete && validatePrescription(odVl, { s: odVlEsfera, c: odVlCilindro, a: odVlEje }, 'OD Lejos', [], {}, true)) {
           if (arePrescriptionsCompatible(odVl, odVc)) {
             odBaseRpi = odVc;
-            odSource = 'VC';
             hOdVc = true;
             const implicitAdd = odVc.esfera! - odVl.esfera!;
             if (implicitAdd > 0) {
@@ -394,7 +387,6 @@ export const useOpticalCalculator = () => {
           }
         } else {
           odBaseRpi = odVc;
-          odSource = 'VC';
           hOdVc = true;
         }
       }
