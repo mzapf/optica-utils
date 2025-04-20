@@ -4,8 +4,10 @@ import { StepperInput } from './StepperInput';
 import { PrescriptionInputGroupProps } from '@/lib/types';
 import * as C from '@/constants/index';
 import { cn } from '@/lib/utils'; // Asegurar importación de cn
+import { RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps> = ({
+export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps & { onReset?: () => void }> = ({
     eyeLabel,
     eyePrefix,
     sectionPrefix,
@@ -14,7 +16,8 @@ export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps> = ({
     fieldErrors,
     handleStepChange,
     handleInputChange,
-    containerClass // Recibe la clase para highlight o normal
+    containerClass, // Recibe la clase para highlight o normal
+    onReset
 }) => {
     const esferaFieldName = `${eyePrefix}${sectionPrefix}Esfera`;
     const cilindroFieldName = `${eyePrefix}${sectionPrefix}Cilindro`;
@@ -26,12 +29,25 @@ export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps> = ({
         containerClass ?? C.NORMAL_CONTAINER_CLASS // Usar clase normal por defecto si no se provee
     );
 
-
     return (
         <div className={finalContainerClass}>
-            <Label className="font-medium text-base text-gray-600 dark:text-gray-400 block mb-2">
-                {eyeLabel}
-            </Label>
+            <div className="flex items-center justify-between mb-2">
+                <Label className="font-medium text-base text-gray-600 dark:text-gray-400 block">
+                    {eyeLabel}
+                </Label>
+                {onReset && (
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="ml-2 text-muted-foreground hover:text-foreground"
+                        onClick={onReset}
+                        aria-label={`Limpiar datos de ${eyeLabel}`}
+                    >
+                        <RotateCcw className="h-5 w-5" />
+                    </Button>
+                )}
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-3 gap-y-4 items-start">
                 <StepperInput
                     id={esferaFieldName}

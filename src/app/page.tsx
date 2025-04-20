@@ -47,6 +47,18 @@ export default function Home() {
         handleCalculateAdd, handleCalculateRpi,
     } = useOpticalCalculator();
 
+    // Funciones para limpiar todos los datos de un ojo (LEJOS, CERCA y ADD)
+    const resetOD = () => {
+        setOdVlEsfera(''); setOdVlCilindro(''); setOdVlEje('');
+        setOdVcEsfera(''); setOdVcCilindro(''); setOdVcEje('');
+        setOdAdd('');
+    };
+    const resetOI = () => {
+        setOiVlEsfera(''); setOiVlCilindro(''); setOiVlEje('');
+        setOiVcEsfera(''); setOiVcCilindro(''); setOiVcEje('');
+        setOiAdd('');
+    };
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-start p-4 sm:p-6 md:p-10 lg:p-12 bg-gray-100 dark:bg-gray-950">
             <Card className="w-full max-w-xl shadow-xl border dark:border-gray-700 bg-white dark:bg-gray-900">
@@ -69,6 +81,7 @@ export default function Home() {
                             fieldErrors={fieldErrors}
                             handleStepChange={handleStepChange}
                             handleInputChange={handleInputChange}
+                            onReset={resetOD}
                         />
                          <div className="pt-4">
                              <PrescriptionInputGroup
@@ -80,6 +93,7 @@ export default function Home() {
                                 fieldErrors={fieldErrors}
                                 handleStepChange={handleStepChange}
                                 handleInputChange={handleInputChange}
+                                onReset={resetOI}
                             />
                          </div>
                     </section>
@@ -160,6 +174,7 @@ export default function Home() {
                             handleStepChange={handleStepChange}
                             handleInputChange={handleInputChange}
                             containerClass={highlightOdVc ? C.HIGHLIGHT_CONTAINER_CLASS : undefined}
+                            onReset={resetOD}
                         />
                          <div className="pt-4">
                               <PrescriptionInputGroup
@@ -172,6 +187,7 @@ export default function Home() {
                                 handleStepChange={handleStepChange}
                                 handleInputChange={handleInputChange}
                                 containerClass={highlightOiVc ? C.HIGHLIGHT_CONTAINER_CLASS : undefined}
+                                onReset={resetOI}
                             />
                          </div>
                         <div className="text-center sm:text-left pt-2">
