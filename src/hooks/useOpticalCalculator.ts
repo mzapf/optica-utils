@@ -152,7 +152,19 @@ export const useOpticalCalculator = () => {
   const handleInputChange = useCallback(
     (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
       (e: React.ChangeEvent<HTMLInputElement>) => {
-        setter(e.target.value);
+        const value = e.target.value;
+        setter(value);
+        // Sincronización inmediata CIL/EJE entre VL y VC
+        // Ojo Derecho
+        if (field === 'odVlCilindro') setOdVcCilindro(value);
+        if (field === 'odVcCilindro') setOdVlCilindro(value);
+        if (field === 'odVlEje') setOdVcEje(value);
+        if (field === 'odVcEje') setOdVlEje(value);
+        // Ojo Izquierdo
+        if (field === 'oiVlCilindro') setOiVcCilindro(value);
+        if (field === 'oiVcCilindro') setOiVlCilindro(value);
+        if (field === 'oiVlEje') setOiVcEje(value);
+        if (field === 'oiVcEje') setOiVlEje(value);
         handleInteraction(field); // Llama a la función unificada de interacción
       },
     [handleInteraction]
@@ -169,14 +181,28 @@ export const useOpticalCalculator = () => {
       const num = parseInput(val);
       const base = num === null || isNaN(num) ? 0 : num;
       let next = base + step;
+      let nextStr = '';
       if (isAxis) {
         next = Math.round(next);
         if (next > 180) next = 1; // Eje va de 1 a 180
         if (next <= 0) next = 180;
-        setter(next.toString());
+        nextStr = next.toString();
+        setter(nextStr);
       } else {
-        setter(formatNumberInput(next, 2));
+        nextStr = formatNumberInput(next, 2);
+        setter(nextStr);
       }
+      // Sincronización inmediata CIL/EJE entre VL y VC
+      // Ojo Derecho
+      if (field === 'odVlCilindro') setOdVcCilindro(nextStr);
+      if (field === 'odVcCilindro') setOdVlCilindro(nextStr);
+      if (field === 'odVlEje') setOdVcEje(nextStr);
+      if (field === 'odVcEje') setOdVlEje(nextStr);
+      // Ojo Izquierdo
+      if (field === 'oiVlCilindro') setOiVcCilindro(nextStr);
+      if (field === 'oiVcCilindro') setOiVlCilindro(nextStr);
+      if (field === 'oiVlEje') setOiVcEje(nextStr);
+      if (field === 'oiVcEje') setOiVlEje(nextStr);
       handleInteraction(field); // Llama a la función unificada de interacción
     },
     [handleInteraction]
