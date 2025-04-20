@@ -191,22 +191,22 @@ export const useOpticalCalculator = () => {
 
     // 1. Parsear Inputs (ESF incompleto se toma como 0.00)
     const odVl: PrescriptionValues = {
-      esfera: odVlEsfera.trim() !== '' ? parseInput(odVlEsfera) : null,
+      esfera: odVlEsfera.trim() !== '' ? parseInput(odVlEsfera) : 0,
       cilindro: odVlCilindro.trim() !== '' ? parseInput(odVlCilindro) : null,
       eje: odVlEje.trim() !== '' ? parseInput(odVlEje) : null
     };
     const oiVl: PrescriptionValues = {
-      esfera: oiVlEsfera.trim() !== '' ? parseInput(oiVlEsfera) : null,
+      esfera: oiVlEsfera.trim() !== '' ? parseInput(oiVlEsfera) : 0,
       cilindro: oiVlCilindro.trim() !== '' ? parseInput(oiVlCilindro) : null,
       eje: oiVlEje.trim() !== '' ? parseInput(oiVlEje) : null
     };
     const odVc: PrescriptionValues = {
-      esfera: odVcEsfera.trim() !== '' ? parseInput(odVcEsfera) : null,
+      esfera: odVcEsfera.trim() !== '' ? parseInput(odVcEsfera) : 0,
       cilindro: odVcCilindro.trim() !== '' ? parseInput(odVcCilindro) : null,
       eje: odVcEje.trim() !== '' ? parseInput(odVcEje) : null
     };
     const oiVc: PrescriptionValues = {
-      esfera: oiVcEsfera.trim() !== '' ? parseInput(oiVcEsfera) : null,
+      esfera: oiVcEsfera.trim() !== '' ? parseInput(oiVcEsfera) : 0,
       cilindro: oiVcCilindro.trim() !== '' ? parseInput(oiVcCilindro) : null,
       eje: oiVcEje.trim() !== '' ? parseInput(oiVcEje) : null
     };
