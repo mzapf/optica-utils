@@ -4,7 +4,7 @@ import * as C from '@/constants/index'; // Importar todas las constantes
 export const validatePrescription = (
     p: PrescriptionValues,
     inputs: { s: string, c: string, a: string },
-    prefix: string, // e.g., "OD VL"
+    prefix: string, // e.g., "OD Lejos"
     errors: string[], // Array para acumular mensajes de error
     fieldErrs: FieldErrors, // Objeto para marcar campos con error
     isRequired: boolean = false // Indica si la esfera de esta prescripción es requerida

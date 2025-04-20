@@ -91,7 +91,7 @@ export default function Home() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 items-start">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="odAdd" className="text-sm font-medium">OD ADD</Label>
-                                    <Input id="odAdd" type="text" inputMode="decimal" placeholder="+2.00" value={odAdd}
+                                    <Input id="odAdd" type="text" inputMode="decimal" placeholder="" value={odAdd}
                                            onChange={handleInputChange(setOdAdd, "odAdd")}
                                         className={cn(
                                             'transition-colors placeholder:text-muted-foreground/60 h-9',
@@ -103,7 +103,7 @@ export default function Home() {
                                 </div>
                                 <div className="space-y-1.5">
                                     <Label htmlFor="oiAdd" className="text-sm font-medium">OI ADD</Label>
-                                    <Input id="oiAdd" type="text" inputMode="decimal" placeholder="+2.00" value={oiAdd}
+                                    <Input id="oiAdd" type="text" inputMode="decimal" placeholder="" value={oiAdd}
                                            onChange={handleInputChange(setOiAdd, "oiAdd")}
                                            className={cn(
                                             'transition-colors placeholder:text-muted-foreground/60 h-9',

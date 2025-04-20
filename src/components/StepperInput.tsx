@@ -51,7 +51,8 @@ export const StepperInput: React.FC<StepperInputProps> = ({
                     min={isAxis ? "1" : undefined}
                     max={isAxis ? "180" : undefined}
                     step={isAxis ? "1" : "0.01"}
-                    placeholder={placeholder}
+                    // Solo cambia el placeholder visual, no el valor real
+                    placeholder={label === "Esfera" ? "Esf." : placeholder}
                     value={value}
                     onChange={handleChange}
                     className={`text-center flex-grow min-w-0 h-9 placeholder:text-muted-foreground/60 rounded-none z-10 relative focus:z-20 focus:ring-0 focus:outline-none border-none shadow-none bg-transparent`}

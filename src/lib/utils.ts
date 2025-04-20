@@ -11,11 +11,12 @@ export function cn(...inputs: ClassValue[]) {
 
 // --- Tus funciones existentes ---
 export const isCompletePrescription = (p: PrescriptionValues, raw: {s: string, c: string, a: string}): boolean => {
-    const hasEsfera = raw.s.trim() !== '' && p.esfera !== null && !isNaN(p.esfera);
+    // Considerar ESF vacía como 0.00 para cálculos
+    const hasEsfera = (raw.s.trim() !== '' || raw.s.trim() === '') && (p.esfera !== null && !isNaN(p.esfera));
     const hasCilindro = raw.c.trim() !== '' && p.cilindro !== null && !isNaN(p.cilindro);
     const hasEje = raw.a.trim() !== '' && p.eje !== null && !isNaN(p.eje);
 
-    if (!hasEsfera) return false; // Esfera siempre necesaria
+    if (!hasEsfera) return false; // Esfera siempre necesaria (pero ahora siempre true)
     if (hasCilindro && !hasEje) return false; // Si hay cilindro, debe haber eje
     if (!hasCilindro && hasEje) return false; // Si no hay cilindro, no debe haber eje (o eje debe ser ignorado)
     // Considerar cilindro 0 como sin cilindro

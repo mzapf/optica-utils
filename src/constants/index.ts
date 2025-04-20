@@ -11,9 +11,9 @@ export const NUMERIC_ERROR = "Debe ser numérico si se ingresa.";
 export const AXIS_RANGE_ERROR = "Debe estar entre 1 y 180.";
 export const AXIS_REQUIRED_ERROR = "Requerido si hay Cilindro.";
 export const AXIS_WITHOUT_CYL_ERROR = "No puede existir sin Cilindro (distinto de cero).";
-export const INCOMPATIBILITY_ERROR = "Incompatibilidad de Cilindro/Eje entre VL y VC impide calcular ADD.";
-export const INSUFFICIENT_DATA_ADD_ERROR = "Datos insuficientes o inválidos en VL/VC para calcular ADD.";
-export const INSUFFICIENT_DATA_RPI_ERROR = "Se requieren datos válidos en (VL y ADD) o en VC.";
+export const INCOMPATIBILITY_ERROR = "Incompatibilidad de Cilindro/Eje entre Lejos y Cerca impide calcular ADD.";
+export const INSUFFICIENT_DATA_ADD_ERROR = "Datos insuficientes o inválidos en Lejos/Cerca para calcular ADD.";
+export const INSUFFICIENT_DATA_RPI_ERROR = "Se requieren datos válidos en (Lejos y ADD) o en Cerca.";
 export const GENERIC_PROCEED_ERROR = "Datos insuficientes/inválidos para proceder.";
 
 // CSS Classes
