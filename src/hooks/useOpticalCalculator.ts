@@ -7,6 +7,7 @@ import {
   formatPrescriptionResult,
   arePrescriptionsCompatible,
   isCompletePrescription,
+  invertPrescriptionInput,
 } from '@/lib/utils';
 import { validatePrescription } from '@/lib/validation';
 
@@ -180,6 +181,76 @@ export const useOpticalCalculator = () => {
     },
     [handleInteraction]
   );
+
+  // --- Invertir graduación de un ojo y distancia ---
+  const invertPrescription = useCallback((eye: 'od' | 'oi', section: 'Vl' | 'Vc') => {
+    // Determinar setters y valores actuales
+    const isOD = eye === 'od';
+    const isVL = section === 'Vl';
+    // Seleccionar los setters y valores de ambos (actual y contrario)
+    const current = isOD
+      ? isVL
+        ? { values: { esfera: odVlEsfera, cilindro: odVlCilindro, eje: odVlEje }, setters: { setEsfera: setOdVlEsfera, setCilindro: setOdVlCilindro, setEje: setOdVlEje } }
+        : { values: { esfera: odVcEsfera, cilindro: odVcCilindro, eje: odVcEje }, setters: { setEsfera: setOdVcEsfera, setCilindro: setOdVcCilindro, setEje: setOdVcEje } }
+      : isVL
+        ? { values: { esfera: oiVlEsfera, cilindro: oiVlCilindro, eje: oiVlEje }, setters: { setEsfera: setOiVlEsfera, setCilindro: setOiVlCilindro, setEje: setOiVlEje } }
+        : { values: { esfera: oiVcEsfera, cilindro: oiVcCilindro, eje: oiVcEje }, setters: { setEsfera: setOiVcEsfera, setCilindro: setOiVcCilindro, setEje: setOiVcEje } };
+    const other = isOD
+      ? isVL
+        ? { values: { esfera: odVcEsfera, cilindro: odVcCilindro, eje: odVcEje }, setters: { setEsfera: setOdVcEsfera, setCilindro: setOdVcCilindro, setEje: setOdVcEje } }
+        : { values: { esfera: odVlEsfera, cilindro: odVlCilindro, eje: odVlEje }, setters: { setEsfera: setOdVlEsfera, setCilindro: setOdVlCilindro, setEje: setOdVlEje } }
+      : isVL
+        ? { values: { esfera: oiVcEsfera, cilindro: oiVcCilindro, eje: oiVcEje }, setters: { setEsfera: setOiVcEsfera, setCilindro: setOiVcCilindro, setEje: setOiVcEje } }
+        : { values: { esfera: oiVlEsfera, cilindro: oiVlCilindro, eje: oiVlEje }, setters: { setEsfera: setOiVlEsfera, setCilindro: setOiVlCilindro, setEje: setOiVlEje } };
+
+    // Validar que haya CIL y EJE válidos
+    const cil = current.values.cilindro.trim();
+    const eje = current.values.eje.trim();
+    let errorFields: string[] = [];
+    if (cil === '' || cil === '0' || isNaN(Number(cil))) errorFields.push('cilindro');
+    if (eje === '' || isNaN(Number(eje))) errorFields.push('eje');
+    if (errorFields.length > 0) {
+      // Marcar error en el campo faltante
+      setFieldErrors(prev => {
+        const copy = { ...prev };
+        const prefix = `${eye}${section}`;
+        if (errorFields.includes('cilindro')) copy[`${prefix}Cilindro`] = true;
+        if (errorFields.includes('eje')) copy[`${prefix}Eje`] = true;
+        return copy;
+      });
+      return;
+    }
+    // Invertir valores
+    const inverted = invertPrescriptionInput(current.values);
+    current.setters.setEsfera(inverted.esfera);
+    current.setters.setCilindro(inverted.cilindro);
+    current.setters.setEje(inverted.eje);
+    // También invertir la distancia contraria si tiene datos
+    if (
+      other.values.cilindro.trim() !== '' &&
+      other.values.eje.trim() !== '' &&
+      other.values.cilindro !== '0'
+    ) {
+      const invertedOther = invertPrescriptionInput(other.values);
+      other.setters.setEsfera(invertedOther.esfera);
+      other.setters.setCilindro(invertedOther.cilindro);
+      other.setters.setEje(invertedOther.eje);
+    }
+    // Limpiar errores de los campos de este grupo
+    setFieldErrors(prev => {
+      const copy = { ...prev };
+      const prefix = `${eye}${section}`;
+      copy[`${prefix}Cilindro`] = false;
+      copy[`${prefix}Eje`] = false;
+      return copy;
+    });
+  }, [
+    odVlEsfera, odVlCilindro, odVlEje, odVcEsfera, odVcCilindro, odVcEje,
+    oiVlEsfera, oiVlCilindro, oiVlEje, oiVcEsfera, oiVcCilindro, oiVcEje,
+    setOdVlEsfera, setOdVlCilindro, setOdVlEje, setOdVcEsfera, setOdVcCilindro, setOdVcEje,
+    setOiVlEsfera, setOiVlCilindro, setOiVlEje, setOiVcEsfera, setOiVcCilindro, setOiVcEje,
+    setFieldErrors
+  ]);
 
   // --- Cálculo ADD ---
   const handleCalculateAdd = useCallback(() => {
@@ -622,5 +693,6 @@ export const useOpticalCalculator = () => {
     errorMessages, fieldErrors,
     highlightOdAdd, highlightOiAdd, highlightOdVc, highlightOiVc,
     handleCalculateAdd, handleCalculateRpi,
+    invertPrescription, // <-- Exponer función
   };
 };

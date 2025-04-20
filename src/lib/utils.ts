@@ -74,3 +74,36 @@ export const arePrescriptionsCompatible = (vl: PrescriptionValues, vc: Prescript
     }
     return true;
 };
+
+// Invierte una receta óptica (inputs como string, salida como string)
+export function invertPrescriptionInput(
+  values: { esfera: string; cilindro: string; eje: string }
+): { esfera: string; cilindro: string; eje: string } {
+  // Parsear valores
+  const esf = parseInput(values.esfera);
+  const cil = parseInput(values.cilindro);
+  const eje = parseInput(values.eje);
+  // Si no hay cilindro o eje, devolver los mismos valores (la validación se hace fuera)
+  if (cil === null || isNaN(cil) || cil === 0 || eje === null || isNaN(eje)) {
+    return values;
+  }
+  // 1. Nueva esfera: esf + cil
+  const newEsf = esf !== null && !isNaN(esf) ? esf + cil : cil;
+  // 2. Cambiar signo del cilindro
+  const newCil = -cil;
+  // 3. Ajustar eje
+  let newEje = eje;
+  if (eje <= 90) {
+    newEje = eje + 90;
+  } else {
+    newEje = eje - 90;
+  }
+  // Normalizar eje a 1-180
+  if (newEje > 180) newEje -= 180;
+  if (newEje <= 0) newEje += 180;
+  return {
+    esfera: formatNumberInput(newEsf, 2),
+    cilindro: formatNumberInput(newCil, 2),
+    eje: Math.round(newEje).toString(),
+  };
+}

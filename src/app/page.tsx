@@ -45,6 +45,7 @@ export default function Home() {
         highlightOdAdd, highlightOiAdd,
         highlightOdVc, highlightOiVc,
         handleCalculateAdd, handleCalculateRpi,
+        invertPrescription, // <-- Agregar función de inversión
     } = useOpticalCalculator();
 
     // Funciones para limpiar todos los datos de un ojo (LEJOS, CERCA y ADD)
@@ -82,6 +83,7 @@ export default function Home() {
                             handleStepChange={handleStepChange}
                             handleInputChange={handleInputChange}
                             onReset={resetOD}
+                            onInvert={() => invertPrescription('od', 'Vl')}
                         />
                          <div className="pt-4">
                              <PrescriptionInputGroup
@@ -94,6 +96,7 @@ export default function Home() {
                                 handleStepChange={handleStepChange}
                                 handleInputChange={handleInputChange}
                                 onReset={resetOI}
+                                onInvert={() => invertPrescription('oi', 'Vl')}
                             />
                          </div>
                     </section>
@@ -179,6 +182,7 @@ export default function Home() {
                             handleInputChange={handleInputChange}
                             containerClass={highlightOdVc ? C.HIGHLIGHT_CONTAINER_CLASS : undefined}
                             onReset={resetOD}
+                            onInvert={() => invertPrescription('od', 'Vc')}
                         />
                          <div className="pt-4">
                               <PrescriptionInputGroup
@@ -192,6 +196,7 @@ export default function Home() {
                                 handleInputChange={handleInputChange}
                                 containerClass={highlightOiVc ? C.HIGHLIGHT_CONTAINER_CLASS : undefined}
                                 onReset={resetOI}
+                                onInvert={() => invertPrescription('oi', 'Vc')}
                             />
                          </div>
                         <div className="text-center sm:text-left pt-2">
