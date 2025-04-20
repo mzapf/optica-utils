@@ -4,7 +4,7 @@ import { StepperInput } from './StepperInput';
 import { PrescriptionInputGroupProps } from '@/lib/types';
 import * as C from '@/constants/index';
 import { cn } from '@/lib/utils'; // Asegurar importación de cn
-import { RotateCcw, RefreshCcw, Trash2 } from 'lucide-react';
+import { RefreshCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps & { onReset?: () => void; onInvert?: () => void }> = ({

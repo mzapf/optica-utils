@@ -206,7 +206,7 @@ export const useOpticalCalculator = () => {
     // Validar que haya CIL y EJE válidos
     const cil = current.values.cilindro.trim();
     const eje = current.values.eje.trim();
-    let errorFields: string[] = [];
+    const errorFields: string[] = [];
     if (cil === '' || cil === '0' || isNaN(Number(cil))) errorFields.push('cilindro');
     if (eje === '' || isNaN(Number(eje))) errorFields.push('eje');
     if (errorFields.length > 0) {
