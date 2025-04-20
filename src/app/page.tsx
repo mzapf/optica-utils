@@ -116,6 +116,7 @@ export default function Home() {
                                             onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", -0.25)}
                                             disabled={parseFloat(odAdd || '0') <= 0}
                                             className="h-9 w-9 flex-shrink-0 rounded-r-none border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
+                                            tabIndex={-1}
                                         >-</Button>
                                         <Input id="odAdd" type="text" inputMode="decimal" placeholder="" value={odAdd}
                                             onChange={handleInputChange(setOdAdd, "odAdd")}
@@ -129,6 +130,7 @@ export default function Home() {
                                         <Button type="button" variant="ghost" size="icon" aria-label="Sumar 0.25"
                                             onClick={() => handleStepChange(odAdd, setOdAdd, "odAdd", 0.25)}
                                             className="h-9 w-9 flex-shrink-0 rounded-l-none border-l dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
+                                            tabIndex={-1}
                                         >+</Button>
                                     </div>
                                 </div>
@@ -139,6 +141,7 @@ export default function Home() {
                                             onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", -0.25)}
                                             disabled={parseFloat(oiAdd || '0') <= 0}
                                             className="h-9 w-9 flex-shrink-0 rounded-r-none border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
+                                            tabIndex={-1}
                                         >-</Button>
                                         <Input id="oiAdd" type="text" inputMode="decimal" placeholder="" value={oiAdd}
                                             onChange={handleInputChange(setOiAdd, "oiAdd")}
@@ -152,6 +155,7 @@ export default function Home() {
                                         <Button type="button" variant="ghost" size="icon" aria-label="Sumar 0.25"
                                             onClick={() => handleStepChange(oiAdd, setOiAdd, "oiAdd", 0.25)}
                                             className="h-9 w-9 flex-shrink-0 rounded-l-none border-l dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
+                                            tabIndex={-1}
                                         >+</Button>
                                     </div>
                                 </div>

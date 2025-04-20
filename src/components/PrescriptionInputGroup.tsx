@@ -42,6 +42,7 @@ export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps & { on
                         type="button"
                         variant="ghost"
                         size="icon"
+                        tabIndex={-1}
                         className="text-muted-foreground hover:text-foreground"
                         onClick={onInvert}
                         aria-label={`Invertir graduación de ${eyeLabel}`}
@@ -54,6 +55,7 @@ export const PrescriptionInputGroup: React.FC<PrescriptionInputGroupProps & { on
                         type="button"
                         variant="ghost"
                         size="icon"
+                        tabIndex={-1}
                         className="ml-1 text-muted-foreground hover:text-foreground"
                         onClick={onReset}
                         aria-label={`Limpiar datos de ${eyeLabel}`}

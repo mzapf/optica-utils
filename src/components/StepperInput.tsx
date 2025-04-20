@@ -38,6 +38,7 @@ export const StepperInput: React.FC<StepperInputProps> = ({
                     type="button"
                     variant="ghost"
                     size="icon"
+                    tabIndex={-1}
                     className="h-9 w-9 flex-shrink-0 rounded-r-none border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                     onClick={() => handleStepChange(value, setter, fieldName, -stepValue, isAxis)}
                     aria-label={`Disminuir ${label}`}
@@ -63,6 +64,7 @@ export const StepperInput: React.FC<StepperInputProps> = ({
                     type="button"
                     variant="ghost"
                     size="icon"
+                    tabIndex={-1}
                     className="h-9 w-9 flex-shrink-0 rounded-l-none border-l dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 text-muted-foreground"
                     onClick={() => handleStepChange(value, setter, fieldName, stepValue, isAxis)}
                     aria-label={`Aumentar ${label}`}
