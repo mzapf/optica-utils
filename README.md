@@ -1,71 +1,94 @@
-# Calculadora Óptica - Optica Utils
+# Optica Utils – Calculadora Óptica Profesional
 
-Esta es una aplicación web desarrollada con [Next.js](https://nextjs.org) que sirve como herramienta para profesionales de la óptica. Permite calcular de forma rápida y sencilla la Adición (ADD) necesaria para una prescripción de cerca y la Regresión para Potencia Intermedia (RPI) a partir de los datos de visión lejana (VL) y visión cercana (VC) o la Adición.
+**Optica Utils** es una aplicación web desarrollada con [Next.js](https://nextjs.org), diseñada para profesionales de la óptica y optometría. Permite calcular de manera precisa la Adición (ADD) y la Regresión para Potencia Intermedia (RPI) a partir de prescripciones ópticas, facilitando la toma de decisiones clínicas y la atención personalizada al paciente.
 
-## Funcionalidades Principales
+---
 
-*   **Cálculo de Adición (ADD):** Introduce los valores de la prescripción de Visión Lejana (VL) y Visión Cercana (VC) para obtener automáticamente la Adición (ADD) correspondiente para cada ojo.
-*   **Cálculo de Regresión para Potencia Intermedia (RPI):** A partir de la prescripción de Visión Lejana (VL) y la Adición (ADD) calculada o introducida, o directamente desde la prescripción de Visión Cercana (VC), la aplicación calcula los valores para la distancia intermedia utilizando dos regresiones comunes: 0.75 y 1.25.
-*   **Interfaz Intuitiva:** Diseño claro y fácil de usar, optimizado para una entrada de datos rápida y visualización clara de los resultados.
-*   **Validación de Datos:** Incorpora validaciones para asegurar que los valores introducidos sean coherentes y estén dentro de los rangos ópticos habituales.
-*   **Diseño Responsivo:** Adaptable a diferentes tamaños de pantalla, funcionando correctamente en escritorio y dispositivos móviles.
+## Características Destacadas
+
+- **Cálculo Automático de Adición (ADD):** Obtén la adición necesaria para visión cercana a partir de los valores de visión lejana (VL) y visión cercana (VC).
+- **Regresión para Potencia Intermedia (RPI):** Calcula rápidamente valores para distancias intermedias (RPI 0.75 y 1.25) usando prescripción de lejos y adición, o directamente desde la prescripción de cerca.
+- **Validación Inteligente de Datos:** El sistema valida los datos ingresados, asegurando coherencia y rangos ópticos adecuados.
+- **Interfaz Moderna y Accesible:** UI intuitiva, responsiva y optimizada para dispositivos móviles y escritorio.
+- **Componentes UI Personalizados:** Basado en [Shadcn/UI](https://ui.shadcn.com/) y [Tailwind CSS](https://tailwindcss.com/) para una experiencia visual consistente.
+- **Código Abierto y Extensible:** Pensado para ser fácilmente mantenible y ampliable por la comunidad.
+
+---
 
 ## Tecnologías Utilizadas
 
-*   **Framework:** [Next.js](https://nextjs.org/) (App Router)
-*   **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
-*   **Librería UI:** [React](https://reactjs.org/)
-*   **Componentes UI:** [Shadcn/UI](https://ui.shadcn.com/)
-*   **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
-*   **Iconos:** [Lucide React](https://lucide.dev/)
-*   **Hooks:** React Hooks para la gestión del estado y la lógica.
-*   **Fuente:** [Geist](https://vercel.com/font) (optimizada con `next/font`)
-*   **Despliegue:** Vercel
+- **Framework:** [Next.js](https://nextjs.org/)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Librería UI:** [React](https://reactjs.org/)
+- **Componentes UI:** [Shadcn/UI](https://ui.shadcn.com/)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
+- **Iconografía:** [Lucide React](https://lucide.dev/)
+- **Fuentes:** [Geist](https://vercel.com/font) (integrada con `next/font`)
+- **Despliegue:** [Vercel](https://vercel.com/)
 
-## Getting Started (Para Desarrollo)
+---
 
-Si deseas ejecutar este proyecto localmente:
+## Instalación y Uso
 
-1.  Clona el repositorio:
+Sigue estos pasos para ejecutar el proyecto localmente:
+
+1. **Clona el repositorio:**
     ```bash
     git clone https://github.com/mzapf/optica-utils.git
     cd optica-utils
     ```
-2.  Instala las dependencias:
+2. **Instala las dependencias:**
     ```bash
     npm install
-    # or
+    # o
     yarn install
-    # or
+    # o
     pnpm install
-    # or
+    # o
     bun install
     ```
-3.  Ejecuta el servidor de desarrollo:
+3. **Inicia el servidor de desarrollo:**
     ```bash
     npm run dev
-    # or
+    # o
     yarn dev
-    # or
+    # o
     pnpm dev
-    # or
+    # o
     bun dev
     ```
 
-Abre http://localhost:3000 en tu navegador para ver la aplicación. Puedes empezar a editar la página modificando `app/page.tsx`. La página se actualiza automáticamente a medida que editas el archivo.
+Accede a [http://localhost:3000](http://localhost:3000) en tu navegador para utilizar la aplicación.
 
-## Learn More
+---
 
-Para aprender más sobre Next.js, echa un vistazo a los siguientes recursos:
+## Contribuciones
 
-*   Next.js Documentation - aprende sobre las características y la API de Next.js.
-*   Learn Next.js - un tutorial interactivo de Next.js.
+Las contribuciones son bienvenidas. Si deseas colaborar:
 
-Puedes consultar el repositorio de Next.js en GitHub - ¡tus comentarios y contribuciones son bienvenidos!
+1. Haz un fork del repositorio.
+2. Crea una rama para tu feature o corrección (`git checkout -b feature/nombre`).
+3. Realiza tus cambios y haz commit.
+4. Envía un Pull Request detallando tu aporte.
 
-## Deploy on Vercel
+Por favor, sigue las buenas prácticas de código y asegúrate de que tus cambios no rompan la funcionalidad existente.
 
-La forma más fácil de desplegar tu aplicación Next.js es usar la Plataforma Vercel de los creadores de Next.js.
+---
 
-Consulta nuestra documentación de despliegue de Next.js para más detalles.
+## Recursos y Documentación
 
+- [Documentación de Next.js](https://nextjs.org/docs)
+- [Guía de Shadcn/UI](https://ui.shadcn.com/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+
+---
+
+## Despliegue
+
+La forma recomendada de desplegar esta aplicación es mediante [Vercel](https://vercel.com/), la plataforma oficial de Next.js.
+
+---
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo [LICENSE](./LICENSE) para más detalles.
