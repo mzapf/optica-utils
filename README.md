@@ -1,17 +1,17 @@
-# Optica Utils – Calculadora Óptica Profesional
+# Calculadora de inversión, adición (ADD) y regresión (RPI)
 
-**Optica Utils** es una aplicación web desarrollada con [Next.js](https://nextjs.org), diseñada para profesionales de la óptica y optometría. Permite calcular de manera precisa la Adición (ADD) y la Regresión para Potencia Intermedia (RPI) a partir de prescripciones ópticas, facilitando la toma de decisiones clínicas y la atención personalizada al paciente.
+Aplicación web para profesionales de la óptica y optometría. Permite calcular Adición (ADD), Regresión para Potencia Intermedia (RPI) e invertir prescripciones, con validación inteligente y sincronización automática de datos.
 
 ---
 
-## Características Destacadas
+## Funcionalidades principales
 
-- **Cálculo Automático de Adición (ADD):** Obtén la adición necesaria para visión cercana a partir de los valores de visión lejana (VL) y visión cercana (VC).
-- **Regresión para Potencia Intermedia (RPI):** Calcula rápidamente valores para distancias intermedias (RPI 0.75 y 1.25) usando prescripción de lejos y adición, o directamente desde la prescripción de cerca.
-- **Validación Inteligente de Datos:** El sistema valida los datos ingresados, asegurando coherencia y rangos ópticos adecuados.
-- **Interfaz Moderna y Accesible:** UI intuitiva, responsiva y optimizada para dispositivos móviles y escritorio.
-- **Componentes UI Personalizados:** Basado en [Shadcn/UI](https://ui.shadcn.com/) y [Tailwind CSS](https://tailwindcss.com/) para una experiencia visual consistente.
-- **Código Abierto y Extensible:** Pensado para ser fácilmente mantenible y ampliable por la comunidad.
+- **Cálculo de adición (ADD):** Calcula la visión cercana a partir de la visión lejana y una adición o calcula la adición entre los valores de lejos y cerca.
+- **Cálculo de RPI (0.75 y 1.25):** Obtén rápidamente valores para distancias intermedias usando prescripción de lejos y ADD, o directamente desde la prescripción de cerca.
+- **Inversión de prescripción:** Invierte la graduación de cualquier ojo y distancia (VL/VC) con un solo clic.
+- **Validación inteligente:** El sistema valida rangos, múltiplos y coherencia entre campos, mostrando errores claros y resaltando los campos afectados.
+- **Interfaz moderna y responsiva:** UI intuitiva, optimizada para escritorio y móvil, con componentes personalizados y resaltado visual de campos calculados o autocompletados.
+- **Restablecimiento y limpieza rápida:** Permite limpiar todos los datos de un ojo o invertir la graduación fácilmente.
 
 ---
 
