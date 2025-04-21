@@ -1,6 +1,6 @@
 # Calculadora de inversión, adición (ADD) y regresión (RPI)
 
-Aplicación web para profesionales de la óptica y optometría. Permite calcular Adición (ADD), Regresión para Potencia Intermedia (RPI) e invertir prescripciones, con validación inteligente y sincronización automática de datos.
+Aplicación web progresiva (PWA) de utilidad para profesionales de la óptica y optometría. Permite realizar cálculos auxiliares como Adición (ADD), Regresión para Potencia Intermedia (RPI) e invertir prescripciones, con validación inteligente y sincronización automática de datos.
 
 ---
 
@@ -80,6 +80,7 @@ Por favor, sigue las buenas prácticas de código y asegúrate de que tus cambio
 - [Documentación de Next.js](https://nextjs.org/docs)
 - [Guía de Shadcn/UI](https://ui.shadcn.com/docs)
 - [Tailwind CSS](https://tailwindcss.com/docs)
+- El icono de la aplicación proviene de [flaticon.com](https://www.flaticon.com/).
 
 ---
 
