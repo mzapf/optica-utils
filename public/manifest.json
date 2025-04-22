@@ -1,6 +1,6 @@
 {
   "name": "Calculadora Óptica",
-  "short_name": "Óptica",
+  "short_name": "Calculadora Óptica",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
