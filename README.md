@@ -1,6 +1,6 @@
-# Calculadora de inversión, adición (ADD) y regresión (RPI)
+# Calculadora de inversión, adición (ADD) y degresión (RPI)
 
-Aplicación web progresiva (PWA) de utilidad para profesionales de la óptica y optometría. Permite realizar cálculos auxiliares como Adición (ADD), Regresión para Potencia Intermedia (RPI) e invertir prescripciones, con validación inteligente y sincronización automática de datos.
+Aplicación web progresiva (PWA) de utilidad para profesionales de la óptica y optometría. Permite realizar cálculos auxiliares como adición, degresión y transposición de recetas, con validación inteligente y sincronización automática de datos.
 
 ---
 
