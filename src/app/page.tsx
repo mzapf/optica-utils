@@ -65,7 +65,7 @@ export default function Home() {
             <Card className="w-full max-w-xl shadow-xl border dark:border-gray-700 bg-white dark:bg-gray-900">
                 <CardHeader className="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-t-lg border-b dark:border-gray-700">
                     <CardTitle className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">Calculadora Óptica</CardTitle>
-                    <CardDescription className="text-gray-600 dark:text-gray-400">Calculadora de inversión, adición (ADD) y degresión
+                    <CardDescription className="text-gray-600 dark:text-gray-400">Calculadora de inversión, adición y degresión
                     </CardDescription>
                 </CardHeader>
 
@@ -86,8 +86,8 @@ export default function Home() {
                             onReset={resetOD}
                             onInvert={() => invertPrescription('od', 'Vl')}
                         />
-                         <div className="pt-4">
-                             <PrescriptionInputGroup
+                        <div className="pt-4">
+                            <PrescriptionInputGroup
                                 eyeLabel="Ojo Izquierdo (OI)"
                                 eyePrefix="oi"
                                 sectionPrefix="Vl"
@@ -99,7 +99,7 @@ export default function Home() {
                                 onReset={resetOI}
                                 onInvert={() => invertPrescription('oi', 'Vl')}
                             />
-                         </div>
+                        </div>
                     </section>
 
                     {/* --- Sección ADD --- */}
@@ -176,7 +176,7 @@ export default function Home() {
                     {/* --- Sección CERCA (VC) --- */}
                     <section className={`space-y-5 p-4 border dark:border-gray-700/50 rounded-lg bg-white dark:bg-gray-800/20 shadow-sm transition-colors`}>
                         <h3 className="text-base sm:text-lg font-semibold border-b dark:border-gray-600 pb-2 mb-4 text-gray-700 dark:text-gray-300">Visión Cercana</h3>
-                         <PrescriptionInputGroup
+                        <PrescriptionInputGroup
                             eyeLabel="Ojo Derecho (OD)"
                             eyePrefix="od"
                             sectionPrefix="Vc"
@@ -189,8 +189,8 @@ export default function Home() {
                             onReset={resetOD}
                             onInvert={() => invertPrescription('od', 'Vc')}
                         />
-                         <div className="pt-4">
-                              <PrescriptionInputGroup
+                        <div className="pt-4">
+                            <PrescriptionInputGroup
                                 eyeLabel="Ojo Izquierdo (OI)"
                                 eyePrefix="oi"
                                 sectionPrefix="Vc"
@@ -203,7 +203,7 @@ export default function Home() {
                                 onReset={resetOI}
                                 onInvert={() => invertPrescription('oi', 'Vc')}
                             />
-                         </div>
+                        </div>
                         <div className="text-center sm:text-left pt-2">
                             <p className="text-xs text-muted-foreground flex items-center justify-center sm:justify-start gap-1.5">
                                 <Info size={14} />
@@ -279,7 +279,7 @@ export default function Home() {
                 </Link>
             </footer>
 
-             <style jsx global>{`
+            <style jsx global>{`
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
                 .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
 

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Calculadora Óptica",
-  description: "Calculadora de inversión, adición (ADD) y degresión (RPI)",
+  description: "Calculadora de inversión, adición y degresión",
 };
 
 export default function RootLayout({
